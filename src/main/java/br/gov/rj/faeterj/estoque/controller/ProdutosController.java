@@ -21,17 +21,16 @@ public class ProdutosController {
 		return "produto/CadastroProduto"; // Retorno do nome da view
 	}
 	// A partir deste controller será possível renderizar o HTML
-	
+
 	@RequestMapping(value = "/produtos/novo", method = RequestMethod.POST)
-	public  String cadastrar(@Valid Produto produto, BindingResult result,
-			Model model, RedirectAttributes attributes) {
+	public String cadastrar(@Valid Produto produto, BindingResult result, Model model, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
-			model.addAttribute("mensagem","Erro no formulário");
+			model.addAttribute("mensagem", "Erro no formulário");
 			return "produto/CadastroProduto";
 		}
 		attributes.addFlashAttribute("mensagem", "Produto salvo com sucesso");
 		System.out.println("SKU >>>>>:" + produto.getSku());
 		return "redirect:/produtos/novo";
 	}
-	
+
 }

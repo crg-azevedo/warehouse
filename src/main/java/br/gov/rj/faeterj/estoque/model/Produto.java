@@ -6,10 +6,9 @@ public class Produto {
 
 	@NotBlank
 	private String sku;
-	
+
 	private String nome;
 
-	
 	public String getSku() {
 		return sku;
 	}
@@ -25,5 +24,5 @@ public class Produto {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 }
