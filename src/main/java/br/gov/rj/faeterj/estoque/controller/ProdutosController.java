@@ -13,24 +13,23 @@ import br.gov.rj.faeterj.estoque.model.Produto;
 
 @Controller
 public class ProdutosController {
-	// (1) Método que devolve o nome da view
-	// e para o DispatcherServlet encontrar o controller
-	// ele deverá estar mapeado
-	@RequestMapping("/produtos/novo") // Configurando a URL
-	public String novo() {
-		return "produto/CadastroProduto"; // Retorno do nome da view
-	}
-	// A partir deste controller será possível renderizar o HTML
 
+	@RequestMapping("/produtos/novo")
+	public String novo(Produto produto) {
+		return "produto/CadastroProduto";
+	}
+	
 	@RequestMapping(value = "/produtos/novo", method = RequestMethod.POST)
-	public String cadastrar(@Valid Produto produto, BindingResult result, Model model, RedirectAttributes attributes) {
+	public String cadastrar(@Valid Produto produto, BindingResult result, 
+			Model model, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
-			model.addAttribute("mensagem", "Erro no formulário");
-			return "produto/CadastroProduto";
+			return novo(produto);
 		}
-		attributes.addFlashAttribute("mensagem", "Produto salvo com sucesso");
-		System.out.println("SKU >>>>>:" + produto.getSku());
+		
+		// Salvar no banco de dados...
+		attributes.addFlashAttribute("mensagem", "Produto salvo com sucesso!");
+		System.out.println(">>> sku: " + produto.getSku());
 		return "redirect:/produtos/novo";
 	}
-
+	
 }

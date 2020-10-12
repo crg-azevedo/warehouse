@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -19,8 +20,8 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import br.gov.rj.faeterj.estoque.controller.ProdutosController;
 
 @Configuration
-@ComponentScan(basePackageClasses = { ProdutosController.class }) // (2)Define onde encontrar os controllers
-@EnableWebMvc // (1) Habilita aplicação como do tipo MVC
+@ComponentScan(basePackageClasses = { ProdutosController.class })//(2)Define onde encontrar os controllers
+@EnableWebMvc // (1) Habilita aplicação como do tipo MVC 
 public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
@@ -36,6 +37,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		// para serem processadas
 		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
 		resolver.setTemplateEngine(templateEngine());
+		resolver.setCharacterEncoding("UTF-8");
 		return resolver;
 	}
 
@@ -55,18 +57,23 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
 		// (1) Quem resolve templates do Spring
 		resolver.setApplicationContext(applicationContext);
-		// (2) O applicationContext é um objeto do Spring que poderá ser obtido assim
-		// que
+		// (2) O applicationContext é um objeto do Spring que poderá ser obtido assim que
 		// a aplicação subir. Para recebê-lo será necessário implementar a Interface
 		// ApplicationContextAware. Com isto, será possível implementar o método
-		// setApplicationContext para receber o atributo applicationContext
+		// setApplicationContext para receber o atributo applicationContext 
 		resolver.setPrefix("classpath:/templates/");
-		// (3) Define onde ficam os templates, tal como o esquema mostrado
+		// (3) Define onde ficam os templates, tal como o esquema mostrado 
 		// na transparência 6
 		resolver.setSuffix(".html");
 		resolver.setTemplateMode(TemplateMode.HTML);
-		resolver.setCharacterEncoding("UTF-8");
 		// (4) Definição do modo do template que será usado
 		return resolver;
 	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		// Permite adicionar recursos estáticos à aplicação
+		registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+	}
+		
 }
